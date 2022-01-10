@@ -6,6 +6,7 @@ from decouple import config
 from slack_bolt import App
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 
+
 BOT_TOKEN = config("SLACK_BOT_TOKEN")
 APP_TOKEN = config("SLACK_APP_TOKEN")
 SIGNING_SECRET = config("SLACK_SIGNING_SECRET")
