@@ -6,6 +6,7 @@ from decouple import config
 from slack_bolt import App
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 
+from helper_functions import get_weight
 
 BOT_TOKEN = config("SLACK_BOT_TOKEN")
 APP_TOKEN = config("SLACK_APP_TOKEN")
@@ -16,8 +17,11 @@ app = App(token=BOT_TOKEN)
 
 @app.message("add")
 def add_message(message, say):
-
-    say(f"Hey there <@{message['user']}>!")
+    weight = get_weight(message_str=message["text"])
+    if weight:
+        say(f"<@{message['user']}>: Added {weight} to app.")
+    else:
+        say(rf"THAT IS NOT A WEIGHT IN FORMAT `\d{2}.\d{1}` (80.0) for 80kg.")
 
 
 def main():
