@@ -17,6 +17,7 @@ app = App(token=BOT_TOKEN)
 
 @app.message("add")
 def add_message(message, say):
+    """Listens for messages containing `add` so that weights can be added."""
     weight = get_weight(message_str=message["text"])
     if weight:
         say(f"<@{message['user']}>: Added {weight} to app.")
