@@ -9,14 +9,15 @@ def get_weight(message_str):
     """Strip the weight from the passed in string and cast to float.
 
     Args:
-        message_str (str): String recieved from Slack.
+        message_str (str): String received from Slack.
 
     Returns:
-        (bool or float): `False` if no match found. However, if a match is found then the first match found will be returned and cast to `float`.
+        (bool or float): `False` if no match found. However, if a match is found it will be
+        returned and cast to `float`.
     """
-    kg_regex = r"\d{2}.\d{1}"
+    kg_regex = r"\d+.\d+|\d+"
     match = re.search(kg_regex, message_str)
     if match:
-        return float(match[0])
+        return float(round(match[0], 2))
     else:
         return False
