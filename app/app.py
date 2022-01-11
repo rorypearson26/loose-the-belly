@@ -17,13 +17,6 @@ SIGNING_SECRET = config("SLACK_SIGNING_SECRET")
 app = App(token=BOT_TOKEN)
 
 
-@app.message(re.compile(r".*", flags=re.IGNORECASE))
-def mop_up_message(message, say):
-    """Listens for messages containing `add` so that weights can be added."""
-    message_str = message["text"]
-    say(f"Listened to: `{message_str}` but did not invoke any actions.")
-
-
 @app.message(re.compile(r"(?<=add )(\d+.\d+|\d+)", flags=re.IGNORECASE))
 def add_message(message, say):
     """Listens for messages containing `add` so that weights can be added."""
@@ -32,6 +25,13 @@ def add_message(message, say):
         say(f"<@{message['user']}>: Added {weight} to app.")
     else:
         say(rf"THAT IS NOT A WEIGHT IN FORMAT `\d{2}.\d{1}` (80.0) for 80kg.")
+
+
+@app.message(re.compile(r".*", flags=re.IGNORECASE))
+def mop_up_message(message, say):
+    """Mops up any messages that are not matched and acknowledges them."""
+    message_str = message["text"]
+    say(f"Listened to: `{message_str}` but did not invoke any actions.")
 
 
 def main():
