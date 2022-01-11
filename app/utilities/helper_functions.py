@@ -18,6 +18,6 @@ def get_weight(message_str):
     kg_regex = r"\d+.\d+|\d+"
     match = re.search(kg_regex, message_str)
     if match:
-        return float(round(match[0], 2))
+        return round(float(match[0]), 2)
     else:
         return False
