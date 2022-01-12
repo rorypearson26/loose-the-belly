@@ -1,26 +1,47 @@
 """Module to keep all database functionality in one place."""
-import sqlalchemy
 import sqlite3
 
+from sqlalchemy import (Column, DateTime, Float, Integer, MetaData, String,
+                        Table, create_engine, engine)
+from sqlalchemy.orm import declarative_base, sessionmaker
+from sqlalchemy_utils import create_database, database_exists
+
+Base = declarative_base()
 DATABASE_NAME = "app/weights.db"
-conn = sqlite3.connect(DATABASE_NAME)
-c = conn.cursor()
+initialise_database()
+
+class Weight(Base):
+    __tablename__ = 'weights'
+    id = Column(Integer, primary_key=True),
+    name = Column(String),
+    weight = Column(Float),
+    date = Column(DateTime),
+    clothing_code = Column(String),
+    
+def initialise_database():
+    meta = MetaData()
+    engine = create_engine(f"sqlite:///{DATABASE_NAME}")
+    if not database_exists(engine.url):
+        create_database(engine.url)
+        weights = Table(
+            "weights",
+            meta,
+            Column("id", Integer, primary_key=True),
+            Column("name", String),
+            Column("weight", Float),
+            Column("date", DateTime),
+            Column("clothing_code", String)
+        )
+        meta.create_all(engine)
+    return engine
 
 
-def create_database():
-    try:
-        table_sql = """CREATE TABLE weight (
-            date datetime,
-            weight char(10),
-            clothing_code char(2))"""
-        c.execute(table_sql)
-    except sqlite3.OperationalError as e:
-        print(f"Could not create table. Following error was raised {e}")
+# def populate_from_csv():
 
 
 def add_weight_measurement(weight):
-    conn = connect_to_database()
+    with engine
 
 
-if __name__ == "__main__":
-    create_database()
+# if __name__ == "__main__":
+#     create_database()
