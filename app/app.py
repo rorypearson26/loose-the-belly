@@ -8,7 +8,8 @@ from decouple import config
 from slack_bolt import App
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 
-from utilities.helper_functions import get_weight
+from utilities.helper_functions import parse_measurement
+from utilities.database_utils import add_measurement
 
 BOT_TOKEN = config("SLACK_BOT_TOKEN")
 APP_TOKEN = config("SLACK_APP_TOKEN")
@@ -20,7 +21,8 @@ app = App(token=BOT_TOKEN)
 @app.message(re.compile(r"(?<=add )(\d+.\d+|\d+)", flags=re.IGNORECASE))
 def add_message(message, say):
     """Listens for messages containing `add` so that weights can be added."""
-    weight = get_weight(message_str=message["text"])
+    measurement = parse_measurement(message_str=message["text"])
+
     if weight:
         say(f"<@{message['user']}>: Added {weight} to app.")
     else:
