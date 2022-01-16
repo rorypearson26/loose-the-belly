@@ -14,6 +14,8 @@ from sqlalchemy import (
 from sqlalchemy.orm import declarative_base, sessionmaker
 from sqlalchemy_utils import create_database, database_exists
 
+from weight import Weight
+
 Base = declarative_base()
 DATABASE_NAME = "app/weights.db"
 engine = create_engine(f"sqlite:///{DATABASE_NAME}")
@@ -24,10 +26,10 @@ def initialise_database():
     if not database_exists(engine.url):
         create_database(engine.url)
         time.sleep(3)
-        Weight.__table__.create(engine)
+        WeightDB.__table__.create(engine)
 
 
-class Weight(Base):
+class WeightDB(Base):
     __tablename__ = "weights"
     id = Column(
         Integer,

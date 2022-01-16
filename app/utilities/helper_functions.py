@@ -4,7 +4,8 @@ Will probably come back later and refactor into different modules.
 """
 from datetime import datetime
 import re
-from dataclasses import dataclass
+
+from weight import Weight
 
 
 def parse_txt(string, regex, cast_to=str):
@@ -27,11 +28,18 @@ def parse_txt(string, regex, cast_to=str):
 
 
 def parse_measurement(string):
-    """"""
+    """[summary]
+
+    Args:
+        string (str): String coming from picked up slack message.
+
+    Returns:
+        weight_obj (Weight): Object containing data needed to add measurement record to database.
+    """
     weight = parse_txt(string=string, regex=r"\d+.\d+|\d+", cast_to=float)
     clothing_code = parse_txt(string=string, regex=r"(?<= )[n|h|l](?= )")
     date = parse_txt(string=string, regex=r"(?<= )\d{2}-\d{2}-\d{2}")
-    weight_obj = Weight(weight=weight, clothing_code=clothing_code)
+    weight_obj = Weight(weight=weight, clothing_code=clothing_code, date=date)
     return weight_obj
 
 

@@ -21,7 +21,7 @@ app = App(token=BOT_TOKEN)
 @app.message(re.compile(r"(?<=add )(\d+.\d+|\d+)", flags=re.IGNORECASE))
 def add_message(message, say):
     """Listens for messages containing `add` so that weights can be added."""
-    measurement = parse_measurement(message_str=message["text"])
+    weight_obj = parse_measurement(message_str=message["text"])
 
     if weight:
         say(f"<@{message['user']}>: Added {weight} to app.")
