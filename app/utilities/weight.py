@@ -1,7 +1,7 @@
 """Module to contain `Weight` class."""
 from datetime import datetime
 
-from app.utilities.helper_functions import format_dates
+import app.utilities.helper_functions as utils
 
 
 class Weight:
@@ -24,7 +24,7 @@ class Weight:
         if date is False:
             date = datetime.time()
         else:
-            date = format_dates(date=date, date_format="%d-%m-%y")
+            date = utils.format_dates(date=date, date_format="%d-%m-%y")
         return date
 
     def parse_clothing_code(self, clothing_code):
