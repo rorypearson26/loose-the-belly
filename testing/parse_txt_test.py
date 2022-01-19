@@ -16,7 +16,7 @@ class ParseTxtTestModule(unittest.TestCase):
             "clothing_code": r"(?<= )[n|h|l](?= )",
         }
 
-    def returns_false_when_not_matched_using_date_regex_test(self):
+    def test_returns_false_when_not_matched_using_date_regex(self):
         regex = self.regex_string_dict["date"]
         input_strings = [
             "No date in format %d-%m-%y here",

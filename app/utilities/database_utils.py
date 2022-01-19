@@ -14,7 +14,7 @@ from sqlalchemy import (
 from sqlalchemy.orm import declarative_base, sessionmaker
 from sqlalchemy_utils import create_database, database_exists
 
-from weight import Weight
+from app.utilities.weight import Weight
 
 Base = declarative_base()
 DATABASE_NAME = "app/weights.db"

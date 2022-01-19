@@ -5,7 +5,7 @@ Will probably come back later and refactor into different modules.
 from datetime import datetime
 import re
 
-from utilities.weight import Weight
+from app.utilities.weight import Weight
 
 
 def parse_txt(string, regex, cast_to=str):
