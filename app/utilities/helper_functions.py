@@ -36,9 +36,9 @@ def parse_measurement(string):
     Returns:
         weight_obj (Weight): Object containing data needed to add measurement record to database.
     """
-    weight = parse_txt(string=string, regex=r"\d+.\d+|\d+", cast_to=float)
+    weight = parse_txt(string=string, regex=r"(?<= )\d+.\d+|\d+(?= )", cast_to=float)
     clothing_code = parse_txt(string=string, regex=r"(?<= )[n|h|l](?= )")
-    date = parse_txt(string=string, regex=r"(?<= )\d{2}-\d{2}-\d{2}")
+    date = parse_txt(string=string, regex=r"(?<= )\d{2}-\d{2}-\d{2}(?= )")
     weight_obj = Weight(weight=weight, clothing_code=clothing_code, date=date)
     return weight_obj
 
