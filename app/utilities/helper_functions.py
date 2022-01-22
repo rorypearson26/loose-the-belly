@@ -8,11 +8,11 @@ import re
 from app.utilities.weight import Weight
 
 
-def parse_txt(string, regex, cast_to=str):
+def parse_txt(msg_str, regex, cast_to=str):
     """Strip required section of text based on regex and cast to specified type.
 
     Args:
-        string (str): String received from Slack.
+        msg_str (str): String received from Slack.
         regex (str): Regex that will be used to search for section in message.
         cast_to (type): data type that the match is to be cast to.
 
@@ -20,26 +20,26 @@ def parse_txt(string, regex, cast_to=str):
         (bool or float): `False` if no match found. However, if a match is found it will be
         returned and cast to specified type.
     """
-    match = re.search(regex, string)
+    match = re.search(regex, msg_str)
     if match:
         return cast_to(match[0])
     else:
         return False
 
 
-def parse_measurement(string):
-    """[summary]
+def parse_measurement(msg_str):
+    """Parse string coming from slack into a useable format.
 
     Args:
-        string (str): String coming from picked up slack message.
+        msg_str (str): String coming from picked up slack message.
 
     Returns:
         weight_obj (Weight): Object containing data needed to add measurement record to database.
     """
-    weight = parse_txt(string=string, regex=r"(?<= )\d+.\d+|\d+(?= )", cast_to=float)
+    weight = parse_txt(msg_str=msg_str, regex=r"(?<= )\d+.\d+|\d+(?= )", cast_to=float)
     if weight:
-        clothing_code = parse_txt(string=string, regex=r"(?<= )[n|h|l](?= )")
-        date = parse_txt(string=string, regex=r"(?<= )\d{2}-\d{2}-\d{2}(?= )")
+        clothing_code = parse_txt(msg_str=msg_str, regex=r"(?<= )[n|h|l](?= )")
+        date = parse_txt(msg_str=msg_str, regex=r"(?<= )\d{2}-\d{2}-\d{2}(?= )")
         weight_obj = Weight(weight=weight, clothing_code=clothing_code, date=date)
         return weight_obj
     else:

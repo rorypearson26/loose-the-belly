@@ -1,11 +1,26 @@
 """Module to contain `Weight` class."""
 from datetime import datetime
 
+from sqlalchemy import Column, DateTime, Float, Integer, String
+from sqlalchemy.orm import declarative_base
+
 import app.utilities.helper_functions as utils
 
 
-class Weight:
+Base = declarative_base()
+
+
+class Weight(Base):
     """Class to contain attributes needed associated to a weight measurement."""
+
+    __tablename__ = "weights"
+    id = Column(
+        Integer,
+        primary_key=True,
+    )
+    weight = Column(Float)
+    date = Column(DateTime, default=datetime.now())
+    clothing_code = Column(String, default="l")
 
     def __init__(self, weight, clothing_code, date):
         """Initialise Weight object.
@@ -22,7 +37,7 @@ class Weight:
 
     def parse_date(self, date):
         if date is False:
-            date = datetime.time()
+            date = datetime.now()
         else:
             date = utils.format_dates(date=date, date_format="%d-%m-%y")
         return date
