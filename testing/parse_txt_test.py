@@ -1,6 +1,5 @@
 """Class for testing `helper_functions.parse_txt` function."""
 
-import re
 import unittest
 
 from app.utilities.helper_functions import parse_txt
