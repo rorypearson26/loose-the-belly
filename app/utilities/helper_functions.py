@@ -5,8 +5,6 @@ Will probably come back later and refactor into different modules.
 from datetime import datetime
 import re
 
-from app.utilities.weight import Weight
-
 
 def parse_txt(msg_str, regex, cast_to=str):
     """Strip required section of text based on regex and cast to specified type.
@@ -23,25 +21,6 @@ def parse_txt(msg_str, regex, cast_to=str):
     match = re.search(regex, msg_str)
     if match:
         return cast_to(match[0])
-    else:
-        return False
-
-
-def parse_measurement(msg_str):
-    """Parse string coming from slack into a useable format.
-
-    Args:
-        msg_str (str): String coming from picked up slack message.
-
-    Returns:
-        weight_obj (Weight): Object containing data needed to add measurement record to database.
-    """
-    weight = parse_txt(msg_str=msg_str, regex=r"(?<= )\d+.\d+|\d+(?= )", cast_to=float)
-    if weight:
-        clothing_code = parse_txt(msg_str=msg_str, regex=r"(?<= )[n|h|l](?= )")
-        date = parse_txt(msg_str=msg_str, regex=r"(?<= )\d{2}-\d{2}-\d{2}(?= )")
-        weight_obj = Weight(weight=weight, clothing_code=clothing_code, date=date)
-        return weight_obj
     else:
         return False
 
