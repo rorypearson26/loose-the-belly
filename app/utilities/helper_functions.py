@@ -6,23 +6,48 @@ from datetime import datetime
 import re
 
 
-def parse_txt(msg_str, regex, cast_to=str):
-    """Strip required section of text based on regex and cast to specified type.
+class TextParser:
+    def __init__(self, input_text, regex_name, cast_to_type=str):
+        """Initialise `TextParser` class.
 
-    Args:
-        msg_str (str): String received from Slack.
-        regex (str): Regex that will be used to search for section in message.
-        cast_to (type): data type that the match is to be cast to.
+        Args:
+            input_text (str): String received from Slack.
+            regex_name (str): name of regex to use for parsing.
+            cast_to_type (type): data type that the match is to be cast to.
+        """
+        self.input_text = input_text
+        self.regex_name = regex_name
+        self.cast_to_type = cast_to_type
+        self.regex = self.get_regex()
+        self.parsed_text = self.parse_text()
+        self.valid = True if self.parsed_text else False
 
-    Returns:
-        (bool or float): `False` if no match found. However, if a match is found it will be
-        returned and cast to specified type.
-    """
-    match = re.search(regex, msg_str)
-    if match:
-        return cast_to(match[0])
-    else:
-        return False
+    def parse_txt(self):
+        """Strip required section of text based on regex and specified type to cast to.
+
+        Returns:
+            match or bool: `False` if no match found. However, if a match is found
+                will be returned and cast to specified type.
+        """
+        match = re.search(self.regex, self.input_text)
+        if match:
+            return self.cast_to_type(match[0])
+        else:
+            return False
+
+    def get_regex(self):
+        """Retrieve the regex corresponding to `self.regex_name`.
+
+        Returns:
+            regex (str): Predefined regex corresponding to `self.regex_name`.
+        """
+        regex_dict = {
+            "weight": r"(?<= )\d+.\d+|\d+(?= )",
+            "date": r"(?<= )\d{2}-\d{2}-\d{2}(?= )",
+            "clothing_code": r"(?<= )[n|h|l](?= )",
+        }
+        regex = regex_dict[self.regex_name]
+        return regex
 
 
 def format_dates(date, date_format=None, return_date_format=None):
@@ -31,11 +56,12 @@ def format_dates(date, date_format=None, return_date_format=None):
         date (str or datetime.datetime): date in string form to convert.
         date_format (str): Date format expected from user.
             See https://docs.python.org/3/library/datetime.html#strftime-and-strptime-format-codes for syntax.
-        return_date_format (str, optional): Specify string format to return date in - if not
-            specified a datetime.datetime will be returned.
+        return_date_format (str, optional): Specify string format to return
+            date in - if not specified a datetime.datetime will be returned.
     Returns:
-        date (datetime.datetime or str): date as a datetime object by default. Alternatively a
-            properly formatted date string according to return_date_format.
+        date (datetime.datetime or str): date as a datetime object by default.
+            Alternatively a properly formatted date string according
+            return_date_format.
     """
     try:
         if not isinstance(date, datetime.datetime):
