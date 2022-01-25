@@ -41,11 +41,17 @@ class ParseTxtTestModule(unittest.TestCase):
         self.false_test(input_strings, self.date_regex)
 
     def test_returns_false_when_not_matched_using_clothing_code_regex(self):
-        input_strings = ["no clothing code here", "nhl hl nh", "n ", "h", "l"]
+        input_strings = [
+            "no clothing code here",
+            "nhl hl nh",
+            "19-20-18n",
+            "19-20-18n",
+            "19-20-18n",
+        ]
         self.false_test(input_strings, self.clothing_code_regex)
 
     def test_returns_false_when_not_matched_using_weight_regex(self):
-        input_strings = ["100.0fs", "not a number", "80df"]
+        input_strings = ["100.0fs", "not a number", "80df", "20-19-22"]
         self.false_test(input_strings, self.weight_regex)
 
     def test_returns_expected_match_using_weight_regex(self):
@@ -66,9 +72,9 @@ class ParseTxtTestModule(unittest.TestCase):
 
     def test_returns_expected_match_using_clothing_code_regex(self):
         input_output_dict = {
-            "n": "add 11 11-12-22 n ",
-            "l": "add 11 12-12-22 l ",
-            "h": "add 11 12-12-22 h ",
+            "n": "add 11 11-12-22 n",
+            "l": "add 11 12-12-22 l",
+            "h": "add 11 12-12-22 h",
         }
         self.true_test(input_output_dict, self.clothing_code_regex)
 
@@ -88,4 +94,4 @@ class ParseTxtTestModule(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    unittest.main(verbosity=2)
+    unittest.main(verbosity=1)

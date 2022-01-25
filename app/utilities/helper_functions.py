@@ -22,6 +22,20 @@ class TextParser:
         self.parsed_text = self.parse_text()
         self.valid = True if self.parsed_text else False
 
+    def get_regex(self):
+        """Retrieve the regex corresponding to `self.regex_name`.
+
+        Returns:
+            regex (str): Predefined regex corresponding to `self.regex_name`.
+        """
+        regex_dict = {
+            "weight": r"(?<= )(\d+.\d+|\d+)(?=\s|$)",
+            "date": r"(?<= )\d{2}-\d{2}-\d{2}(?=\s|$)",
+            "clothing_code": r"(?<= )[n{1}|h{1}|l{1}](?=\s|$)",
+        }
+        regex = regex_dict[self.regex_name]
+        return regex
+
     def parse_txt(self):
         """Strip required section of text based on regex and specified type to cast to.
 
@@ -34,20 +48,6 @@ class TextParser:
             return self.cast_to_type(match[0])
         else:
             return False
-
-    def get_regex(self):
-        """Retrieve the regex corresponding to `self.regex_name`.
-
-        Returns:
-            regex (str): Predefined regex corresponding to `self.regex_name`.
-        """
-        regex_dict = {
-            "weight": r"(?<= )\d+.\d+|\d+(?= )",
-            "date": r"(?<= )\d{2}-\d{2}-\d{2}(?= )",
-            "clothing_code": r"(?<= )[n|h|l](?= )",
-        }
-        regex = regex_dict[self.regex_name]
-        return regex
 
 
 def format_dates(date, date_format=None, return_date_format=None):
