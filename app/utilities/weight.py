@@ -33,16 +33,21 @@ class Weight(Base):
         self.clothing_code = self.parse_clothing_code(msg_str)
         self.date = self.parse_date(msg_str)
 
-    def parse_weight(self, msg_str):
-        weight = TextParser(
-            input_text=msg_str, cast_to_type=float, regex_name='weight'
+    def __repr__(self):
+        info = (
+            f"weight: {self.weight}, clothing_code: {self.clothing_code}, "
+            f"date: {self.date}"
         )
+        return info
+
+    def parse_weight(self, msg_str):
+        weight = TextParser(input_text=msg_str, cast_to_type=float, regex_name="weight")
         if not weight.valid:
             raise ValueError("Weight could not be parsed.")
         return weight.parsed_text
 
     def parse_date(self, msg_str):
-        date = TextParser(input_text=msg_str, regex_name='date')
+        date = TextParser(input_text=msg_str, regex_name="date")
         if not date.valid:
             date.parsed_text = datetime.now()
         else:
@@ -52,7 +57,7 @@ class Weight(Base):
         return date.parsed_text
 
     def parse_clothing_code(self, msg_str):
-        clothing_code = TextParser(input_text=msg_str, regex_name='clothing_code')
+        clothing_code = TextParser(input_text=msg_str, regex_name="clothing_code")
         if not clothing_code.valid:
             clothing_code.parsed_text = "l"
         return clothing_code.parsed_text
