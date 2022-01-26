@@ -43,9 +43,10 @@ def remove_last_measurement():
     Session = get_session()
     with Session.begin() as s:
         last_record = s.query(Weight).order_by(Weight.id.desc()).first()
-        return_val = False if last_record is None else last_record
+        result = False if last_record is None else last_record
         s.commit()
-        return last_record
+        print(result)
+        return result
 
 
 if __name__ == "__main__":

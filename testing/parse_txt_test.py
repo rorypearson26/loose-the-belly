@@ -1,15 +1,15 @@
-"""Class for testing `helper_functions.parse_txt` function."""
+"""Class for testing `helper_functions.parse_text` function."""
 
 import unittest
 from unittest.mock import MagicMock
 
 from app.utilities.helper_functions import TextParser
 
-parse_test = TextParser.parse_txt
+parse_test = TextParser.parse_text
 
 
 class ParseTxtTestModule(unittest.TestCase):
-    """Test the function `helper_functions.parse_txt`."""
+    """Test the function `helper_functions.parse_text`."""
 
     def setUp(self):
         self.weight_regex = self.retrieve_regex("weight")
@@ -81,14 +81,14 @@ class ParseTxtTestModule(unittest.TestCase):
     def false_test(self, input_strings, regex):
         for test_str in input_strings:
             mock = self.set_up_mock(regex=regex, input_text=test_str)
-            func_result = TextParser.parse_txt(mock)
+            func_result = TextParser.parse_text(mock)
             with self.subTest(f"{test_str} should return `False`"):
                 self.assertFalse(func_result)
 
     def true_test(self, input_output_dict, regex):
         for expected, test_str in input_output_dict.items():
             mock = self.set_up_mock(regex=regex, input_text=test_str)
-            func_result = TextParser.parse_txt(mock)
+            func_result = TextParser.parse_text(mock)
             with self.subTest(f"`{test_str}` should return `{expected}`"):
                 self.assertEqual(expected, func_result)
 

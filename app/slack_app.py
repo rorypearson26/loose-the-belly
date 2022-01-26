@@ -1,6 +1,4 @@
 """Module containing routing for messages coming from slack.
-
-
 """
 import re
 
@@ -32,6 +30,11 @@ def add_message(message, say):
         say(msg)
     else:
         say(rf"THAT IS NOT A WEIGHT IN FORMAT `\d{2}.\d{1}` (80.0) for 80kg.")
+
+
+@app.message(re.compile(r"deletelast", flags=re.IGNORECASE))
+def delete_message(message, say):
+    """Listens for messages containing `delete` so that measurements can be deleted."""
 
 
 @app.message(re.compile(r".*", flags=re.IGNORECASE))

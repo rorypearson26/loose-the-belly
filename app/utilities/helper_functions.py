@@ -36,7 +36,7 @@ class TextParser:
         regex = regex_dict[self.regex_name]
         return regex
 
-    def parse_txt(self):
+    def parse_text(self):
         """Strip required section of text based on regex and specified type to cast to.
 
         Returns:
