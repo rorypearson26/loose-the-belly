@@ -64,8 +64,8 @@ def format_dates(date, date_format=None, return_date_format=None):
             return_date_format.
     """
     try:
-        if not isinstance(date, datetime.datetime):
-            date = datetime.datetime.strptime(date, date_format)
+        if not isinstance(date, datetime):
+            date = datetime.strptime(date, date_format)
         if return_date_format:
             date = date.strftime(return_date_format)
         return date
