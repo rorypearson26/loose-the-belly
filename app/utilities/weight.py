@@ -4,7 +4,7 @@ from datetime import datetime
 from sqlalchemy import Column, DateTime, Float, Integer, String
 from sqlalchemy.orm import declarative_base
 
-from app.utilities.helper_functions import parse_txt, format_dates
+from app.utilities.helper_functions import TextParser, format_dates
 
 
 Base = declarative_base()
@@ -34,25 +34,25 @@ class Weight(Base):
         self.date = self.parse_date(msg_str)
 
     def parse_weight(self, msg_str):
-        weight = parse_txt(
-            msg_str=msg_str, regex=r"(?<= )\d+.\d+|\d+(?= )", cast_to=float
+        weight = TextParser(
+            input_text=msg_str, cast_to_type=float, regex_name='weight'
         )
-        if weight is False:
+        if not weight.valid:
             raise ValueError("Weight could not be parsed.")
-        return weight
+        return weight.parsed_text
 
     def parse_date(self, msg_str):
-        date = parse_txt(msg_str=msg_str, regex=r"(?<= )\d{2}-\d{2}-\d{2}(?= )")
-        if date is False:
-            date = datetime.now()
+        date = TextParser(input_text=msg_str, regex_name='date')
+        if not date.valid:
+            date.parsed_text = datetime.now()
         else:
-            date = format_dates(date=date, date_format="%d-%m-%y")
-        return date
+            date.parsed_text = format_dates(
+                date=date.parsed_text, date_format="%d-%m-%y"
+            )
+        return date.parsed_text
 
     def parse_clothing_code(self, msg_str):
-        clothing_code = parse_txt(msg_str=msg_str, regex=r"(?<= )[n|h|l](?= )")
-        if clothing_code is False:
-            clothing_code = "l"
-        else:
-            clothing_code = clothing_code
-        return clothing_code
+        clothing_code = TextParser(input_text=msg_str, regex_name='clothing_code')
+        if not clothing_code.valid:
+            clothing_code.parsed_text = "l"
+        return clothing_code.parsed_text
