@@ -27,9 +27,26 @@ def add_measurement(weight_obj):
     """Adds weight measurement coming from the slack app to `Weight` table.
 
     Args:
-        weight_obj (:py:class:`Weight`): custom class that contains data needed to add a new
-            weight measurement.
+        weight_obj (:py:class:`Weight`): custom class that contains data needed
+            to add a new weight measurement.
     """
     Session = get_session()
     with Session.begin() as s:
         s.add(weight_obj)
+
+
+def remove_last_measurement():
+    """Removes the last measurement added to the database.
+
+    If no measurements exist then `False` is returned.
+    """
+    Session = get_session()
+    with Session.begin() as s:
+        last_record = s.query(Weight).order_by(Weight.id.desc()).first()
+        return_val = False if last_record is None else last_record
+        s.commit()
+        return last_record
+
+
+if __name__ == "__main__":
+    remove_last_measurement()
