@@ -72,7 +72,7 @@ class ParseTxtTestModule(unittest.TestCase):
 
     def test_returns_expected_match_using_clothing_code_regex(self):
         input_output_dict = {
-            "n": "add 11 11-12-22 n",
+            "n": "ADD 70.2 N 07-12-21",
             "l": "add 11 12-12-22 l",
             "h": "add 11 12-12-22 h",
         }

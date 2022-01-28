@@ -15,7 +15,7 @@ class TextParser:
             regex_name (str): name of regex to use for parsing.
             cast_to_type (type): data type that the match is to be cast to.
         """
-        self.input_text = input_text
+        self.input_text = input_text.lower()
         self.regex_name = regex_name
         self.cast_to_type = cast_to_type
         self.regex = self.get_regex()
@@ -43,7 +43,7 @@ class TextParser:
             match or bool: `False` if no match found. However, if a match is found
                 will be returned and cast to specified type.
         """
-        match = re.search(self.regex, self.input_text)
+        match = re.search(self.regex, self.input_text, flags=re.IGNORECASE)
         if match:
             return self.cast_to_type(match[0])
         else:

@@ -1,4 +1,6 @@
 """Module to keep all database functionality in one place."""
+from copy import deepcopy
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy_utils import create_database, database_exists
@@ -43,10 +45,13 @@ def remove_last_measurement():
     Session = get_session()
     with Session.begin() as s:
         last_record = s.query(Weight).order_by(Weight.id.desc()).first()
-        result = False if last_record is None else last_record
-        s.commit()
-        print(result)
-        return result
+        if last_record is None:
+            return False
+        else:
+            deepcopy(last_record)
+            s.delete(last_record)
+            s.commit()
+        return last_record
 
 
 if __name__ == "__main__":

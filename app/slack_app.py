@@ -6,7 +6,7 @@ from decouple import config
 from slack_bolt import App
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 
-from app.utilities.database_utils import add_measurement
+from app.utilities.database_utils import add_measurement, remove_last_measurement
 from app.utilities.weight import Weight
 
 BOT_TOKEN = config("SLACK_BOT_TOKEN")
@@ -35,6 +35,19 @@ def add_message(message, say):
 @app.message(re.compile(r"deletelast", flags=re.IGNORECASE))
 def delete_message(message, say):
     """Listens for messages containing `delete` so that measurements can be deleted."""
+    return_msg = remove_last_measurement()
+    if not return_msg:
+        return_msg = "No record to delete."
+    else:
+        return_msg = f"Deleted:\n{str(return_msg)}"
+    say(return_msg)
+
+
+@app.message(re.compile(r"readcsv", flags=re.IGNORECASE))
+def read_in_message(message, say):
+    """Listens for messages containing `delete` so that measurements can be deleted."""
+    return_msg = str(remove_last_measurement())
+    say(return_msg)
 
 
 @app.message(re.compile(r".*", flags=re.IGNORECASE))

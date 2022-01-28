@@ -36,7 +36,7 @@ class Weight(Base):
     def __repr__(self):
         info = (
             f"weight: {self.weight}, clothing_code: {self.clothing_code}, "
-            f"date: {self.date}"
+            f"date: {format_dates(date=self.date, return_date_format='%d-%m-%y')}"
         )
         return info
 
