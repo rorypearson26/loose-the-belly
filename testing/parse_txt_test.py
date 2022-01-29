@@ -60,9 +60,9 @@ class ParseTxtTestModule(unittest.TestCase):
 
     def test_returns_expected_match_using_weight_regex(self):
         input_output_dict = {
-            "11": "add 11 this",
+            "11.4": "add 11.4 this",
             "12.4": "add 12.4",
-            "13": "add 13",
+            "13.0": "add 13.0",
             "14.5": "add 14.5 n",
         }
         self.true_test(input_output_dict, self.weight_regex)

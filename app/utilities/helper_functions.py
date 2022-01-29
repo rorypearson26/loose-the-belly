@@ -29,7 +29,7 @@ class TextParser:
             regex (str): Predefined regex corresponding to `self.regex_name`.
         """
         regex_dict = {
-            "weight": r"(?<= )(\d+.\d+|\d+)(?=\s|$)",
+            "weight": r"(?:(?<=\s)|^)\d+\.\d+(?=\s|$)",
             "date": r"(?<= )[0-3][0-9][0-1][0-2][1-2][0-9]|\d{2}-\d{2}-\d{2}(?=\s|$)",
             "clothing_code": r"(?<= )[n{1}|h{1}|l{1}](?=\s|$)",
         }
@@ -71,3 +71,5 @@ def format_dates(date, date_format=None, return_date_format=None):
         return date
     except ValueError:
         print(f"Variable `date_format`: {date} should be in the format {date_format}.")
+
+
