@@ -9,7 +9,10 @@ parse_test = TextParser.parse_text
 
 
 class ParseTxtTestModule(unittest.TestCase):
-    """Test the function `helper_functions.parse_text`."""
+    """Test the function `helper_functions.parse_text`.
+
+    At the point where this function is called, all text will be in lowercase.
+    """
 
     def setUp(self):
         self.weight_regex = self.retrieve_regex("weight")
@@ -34,9 +37,10 @@ class ParseTxtTestModule(unittest.TestCase):
     def test_returns_false_when_not_matched_using_date_regex(self):
         input_strings = [
             "No date in format %d-%m-%y here",
-            "20-1-19",
-            "1-1-2000",
-            "20/11/21",
+            "add 20-1-19",
+            "add 1-1-2000",
+            "add 20/11/21",
+            "add 401221",
         ]
         self.false_test(input_strings, self.date_regex)
 
@@ -72,7 +76,7 @@ class ParseTxtTestModule(unittest.TestCase):
 
     def test_returns_expected_match_using_clothing_code_regex(self):
         input_output_dict = {
-            "n": "ADD 70.2 N 07-12-21",
+            "n": "add 70.2 n 07-12-21",
             "l": "add 11 12-12-22 l",
             "h": "add 11 12-12-22 h",
         }
