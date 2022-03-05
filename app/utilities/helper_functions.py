@@ -5,6 +5,9 @@ Will probably come back later and refactor into different modules.
 from datetime import datetime
 import re
 
+class DateFormatError(Exception):
+    pass
+
 
 class TextParser:
     def __init__(self, input_text, regex_name, cast_to_type=str):
@@ -70,6 +73,7 @@ def format_dates(date, date_format=None, return_date_format=None):
             date = date.strftime(return_date_format)
         return date
     except ValueError:
-        print(f"Variable `date_format`: {date} should be in the format {date_format}.")
+        raise DateFormatError()
 
-
+def parse_csv(msg_str):
+    csv_list = msg_str.split("\n")

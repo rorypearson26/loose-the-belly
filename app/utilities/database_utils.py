@@ -6,6 +6,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy_utils import create_database, database_exists
 
 from app.utilities.weight import Weight
+from app.utilities.helper_functions import 
 
 DATABASE_NAME = "app/weights.db"
 
@@ -52,6 +53,16 @@ def remove_last_measurement():
             s.delete(last_record)
             s.commit()
         return last_record
+
+
+def add_batch_measurements():
+    """Adds a batch of weight measurements to the database.
+
+    If an error occurs then `False` will be returned.
+    """
+
+    Session = get_session()
+    with Session.begin() as s:
 
 
 if __name__ == "__main__":

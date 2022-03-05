@@ -4,7 +4,7 @@ from datetime import datetime
 from sqlalchemy import Column, DateTime, Float, Integer, String
 from sqlalchemy.orm import declarative_base
 
-from app.utilities.helper_functions import TextParser, format_dates
+from app.utilities.helper_functions import (TextParser, format_dates, DateFormatError)
 
 
 Base = declarative_base()
@@ -51,9 +51,14 @@ class Weight(Base):
         if not date.valid:
             date.parsed_text = datetime.now()
         else:
-            date.parsed_text = format_dates(
-                date=date.parsed_text, date_format="%d-%m-%y"
-            )
+            try:
+                date.parsed_text = format_dates(
+                    date=date.parsed_text, date_format="%d-%m-%y"
+                )
+            except DateFormatError:
+                date.parsed_text = format_dates(
+                    date=date.parsed_text, date_format="%d%m%y"
+                )
         return date.parsed_text
 
     def parse_clothing_code(self, msg_str):
