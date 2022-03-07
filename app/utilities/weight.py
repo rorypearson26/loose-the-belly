@@ -47,6 +47,7 @@ class Weight(Base):
         return weight.parsed_text
 
     def parse_date(self, msg_str):
+        time = TextParser(input_text=msg_str, regex_name="time")
         date = TextParser(input_text=msg_str, regex_name="date")
         if not date.valid:
             date.parsed_text = datetime.now()
@@ -56,10 +57,16 @@ class Weight(Base):
                     date=date.parsed_text, date_format="%d-%m-%y"
                 )
             except DateFormatError:
-                date.parsed_text = format_dates(
-                    date=date.parsed_text, date_format="%d%m%y"
+                if time:
+                    date_format = "%d%m%y%H%M"
+                    text = f"{date.parsed_text}{time.parsed_text}"
+                else:
+                    date_format = "%d%m%y"
+                    text = date.parsed_text
+                parsed_text = format_dates(
+                    date=text, date_format=date_format
                 )
-        return date.parsed_text
+        return parsed_text
 
     def parse_clothing_code(self, msg_str):
         clothing_code = TextParser(input_text=msg_str, regex_name="clothing_code")

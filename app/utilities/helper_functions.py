@@ -35,6 +35,7 @@ class TextParser:
             "weight": r"(?:(?<=\s)|^)\d+\.\d+(?=\s|$)",
             "date": r"(?<= )[0-3][0-9][0-1][0-2][1-2][0-9]|\d{2}-\d{2}-\d{2}(?=\s|$)",
             "clothing_code": r"(?<= )[n{1}|h{1}|l{1}](?=\s|$)",
+            "time": r"(?<= )[0-2][0-9][0-5][0-9](?=\s|$)"
         }
         regex = regex_dict[self.regex_name]
         return regex

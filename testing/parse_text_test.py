@@ -8,7 +8,7 @@ from app.utilities.helper_functions import TextParser
 parse_test = TextParser.parse_text
 
 
-class ParseTxtTestModule(unittest.TestCase):
+class ParseTextTestModule(unittest.TestCase):
     """Test the function `helper_functions.parse_text`.
 
     At the point where this function is called, all text will be in lowercase.
