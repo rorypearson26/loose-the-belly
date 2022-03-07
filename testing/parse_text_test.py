@@ -38,7 +38,7 @@ class ParseTextTestModule(unittest.TestCase):
         input_strings = [
             "No date in format %d-%m-%y here",
             "add 20-1-19",
-            "add 1-1-2000",
+            "add 112000",
             "add 20/11/21",
             "add 401221",
         ]
@@ -48,14 +48,14 @@ class ParseTextTestModule(unittest.TestCase):
         input_strings = [
             "no clothing code here",
             "nhl hl nh",
-            "19-20-18n",
-            "19-20-18n",
-            "19-20-18n",
+            "192018n",
+            "192018n",
+            "192018n",
         ]
         self.false_test(input_strings, self.clothing_code_regex)
 
     def test_returns_false_when_not_matched_using_weight_regex(self):
-        input_strings = ["100.0fs", "not a number", "80df", "20-19-22"]
+        input_strings = ["100.0fs", "not a number", "80df", "201922"]
         self.false_test(input_strings, self.weight_regex)
 
     def test_returns_expected_match_using_weight_regex(self):
@@ -69,16 +69,16 @@ class ParseTextTestModule(unittest.TestCase):
 
     def test_returns_expected_match_using_date_regex(self):
         input_output_dict = {
-            "11-12-22": "add 11 this 11-12-22",
-            "12-12-22": "add 11 this 12-12-22 n",
+            "111222": "add 11 this 111222",
+            "121222": "add 11 this 121222 n",
         }
         self.true_test(input_output_dict, self.date_regex)
 
     def test_returns_expected_match_using_clothing_code_regex(self):
         input_output_dict = {
-            "n": "add 70.2 n 07-12-21",
-            "l": "add 11 12-12-22 l",
-            "h": "add 11 12-12-22 h",
+            "n": "add 70.2 n 071221",
+            "l": "add 11 121222 l",
+            "h": "add 11 121222 h",
         }
         self.true_test(input_output_dict, self.clothing_code_regex)
 
