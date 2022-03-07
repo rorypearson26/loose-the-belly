@@ -4,7 +4,8 @@ from datetime import datetime
 from sqlalchemy import Column, DateTime, Float, Integer, String
 from sqlalchemy.orm import declarative_base
 
-from app.utilities.helper_functions import parse_txt, format_dates
+from app.utilities.helper_functions import format_dates
+from app.utilities.text_parsing import TextParser
 
 
 Base = declarative_base()
@@ -33,26 +34,53 @@ class Weight(Base):
         self.clothing_code = self.parse_clothing_code(msg_str)
         self.date = self.parse_date(msg_str)
 
-    def parse_weight(self, msg_str):
-        weight = parse_txt(
-            msg_str=msg_str, regex=r"(?<= )\d+.\d+|\d+(?= )", cast_to=float
+    def __repr__(self):
+        info = (
+            f"weight: {self.weight}, clothing_code: {self.clothing_code}, "
+            f"date: {format_dates(date=self.date, return_date_format='%d-%m-%y')}"
         )
-        if weight is False:
+        return info
+    
+    def to_dict(self):
+        return {
+            'weight': self.weight,
+            'clothing_code': self.clothing_code,
+            'date': self.date
+        }
+
+    def parse_weight(self, msg_str):
+        weight = TextParser(input_text=msg_str, cast_to_type=float, regex_name="weight")
+        if not weight.valid:
             raise ValueError("Weight could not be parsed.")
-        return weight
+        return weight.parsed_text
 
     def parse_date(self, msg_str):
-        date = parse_txt(msg_str=msg_str, regex=r"(?<= )\d{2}-\d{2}-\d{2}(?= )")
-        if date is False:
-            date = datetime.now()
+        time = TextParser(input_text=msg_str, regex_name="time")
+        date = TextParser(input_text=msg_str, regex_name="date")
+        if not date.valid:
+            parsed_text = datetime.now()
         else:
-            date = format_dates(date=date, date_format="%d-%m-%y")
-        return date
+            if time:
+                date_format = "%d%m%y%H%M"
+                text = f"{date.parsed_text}{time.parsed_text}"
+            else:
+                date_format = "%d%m%y"
+                text = date.parsed_text
+            parsed_text = format_dates(
+                date=text, date_format=date_format
+            )
+        return parsed_text
 
     def parse_clothing_code(self, msg_str):
-        clothing_code = parse_txt(msg_str=msg_str, regex=r"(?<= )[n|h|l](?= )")
-        if clothing_code is False:
-            clothing_code = "l"
-        else:
-            clothing_code = clothing_code
-        return clothing_code
+        clothing_code = TextParser(input_text=msg_str, regex_name="clothing_code")
+        if not clothing_code.valid:
+            clothing_code.parsed_text = "l"
+        return clothing_code.parsed_text
+
+
+def parse_weight_csv(msg_str):
+    csv_list = msg_str.split("\n")
+    weight_list = []
+    for data_point in csv_list:
+        weight_list.append(Weight(data_point))
+    return weight_list
