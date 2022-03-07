@@ -4,7 +4,8 @@ from datetime import datetime
 from sqlalchemy import Column, DateTime, Float, Integer, String
 from sqlalchemy.orm import declarative_base
 
-from app.utilities.helper_functions import (TextParser, format_dates, DateFormatError)
+from app.utilities.helper_functions import format_dates
+from app.utilities.text_parsing import TextParser
 
 
 Base = declarative_base()
@@ -68,3 +69,11 @@ class Weight(Base):
         if not clothing_code.valid:
             clothing_code.parsed_text = "l"
         return clothing_code.parsed_text
+
+
+def parse_weight_csv(msg_str):
+    csv_list = msg_str.split("\n")
+    weight_list = []
+    for data_point in csv_list:
+        weight_list.append(Weight(data_point))
+    return weight_list

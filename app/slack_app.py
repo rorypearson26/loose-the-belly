@@ -6,10 +6,9 @@ from decouple import config
 from slack_bolt import App
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 
-from app.utilities.database_utils import (add_batch_measurements,
-                                          add_measurement,
+from app.utilities.database_utils import (add_measurement,
                                           remove_last_measurement)
-from app.utilities.weight import Weight
+from app.utilities.weight import Weight, parse_weight_csv
 
 BOT_TOKEN = config("SLACK_BOT_TOKEN")
 APP_TOKEN = config("SLACK_APP_TOKEN")
@@ -48,9 +47,9 @@ def delete_message(message, say):
 @app.message(re.compile(r"readcsv", flags=re.IGNORECASE))
 def read_csv_message(message, say):
     """Listens for messages containing `readcsv` so bulk measurements can be added."""
-
-    return_msg = add_batch_measurements()
-    say(return_msg)
+    weight_list = parse_weight_csv(msg_str=message["text"])
+    return_msg = add_measurement(weight_list)
+    say("Did something")
 
 
 @app.message(re.compile(r".*", flags=re.IGNORECASE))

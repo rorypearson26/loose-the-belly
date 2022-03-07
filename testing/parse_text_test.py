@@ -3,7 +3,7 @@
 import unittest
 from unittest.mock import MagicMock
 
-from app.utilities.helper_functions import TextParser
+from app.utilities.text_parsing import TextParser
 
 parse_test = TextParser.parse_text
 

@@ -6,7 +6,6 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy_utils import create_database, database_exists
 
 from app.utilities.weight import Weight
-from app.utilities.helper_functions import 
 
 DATABASE_NAME = "app/weights.db"
 
@@ -26,7 +25,7 @@ def initialise_database(engine):
         Weight.__table__.create(engine)
 
 
-def add_measurement(weight_obj):
+def add_measurement(weight_objects):
     """Adds weight measurement coming from the slack app to `Weight` table.
 
     Args:
@@ -35,7 +34,11 @@ def add_measurement(weight_obj):
     """
     Session = get_session()
     with Session.begin() as s:
-        s.add(weight_obj)
+        if isinstance(weight_objects, list):
+            s.add_all(weight_objects)
+        else:
+            s.add(weight_objects)
+        s.commit()
 
 
 def remove_last_measurement():
@@ -55,14 +58,13 @@ def remove_last_measurement():
         return last_record
 
 
-def add_batch_measurements():
-    """Adds a batch of weight measurements to the database.
+# def add_batch_measurements(weight_obj_list):
+#     """Adds a batch of weight measurements to the database.
 
-    If an error occurs then `False` will be returned.
-    """
-
-    Session = get_session()
-    with Session.begin() as s:
+#     If an error occurs then `False` will be returned.
+#     """
+#     Session = get_session()
+#     with Session.begin() as s:
 
 
 if __name__ == "__main__":
