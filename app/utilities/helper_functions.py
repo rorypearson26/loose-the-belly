@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date, datetime, timedelta
 
 
 def format_dates(date, date_format=None, return_date_format=None):
@@ -19,3 +19,19 @@ def format_dates(date, date_format=None, return_date_format=None):
     if return_date_format:
         date = date.strftime(return_date_format)
     return date
+
+
+def get_date_range(length):
+    """Returns a tuple of `datetime` objects equivalent to today minus length (months).
+
+    Args:
+        length (:obj:`int`): Length in months to go back in time.
+
+    Returns:
+        (:obj:`datetime.datetime`, :obj:`datetime.datetime`): Tuple in the format:
+        (`start`, `end`).
+    """
+    end = datetime.now()
+    rough_days = int(length) * 30
+    start = end - timedelta(days=rough_days)
+    return (start, end)
