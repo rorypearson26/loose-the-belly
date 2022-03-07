@@ -6,6 +6,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy_utils import create_database, database_exists
 
 from app.utilities.weight import Weight
+from app.utilities.helper_functions import get_date_range
 
 DATABASE_NAME = "app/weights.db"
 
@@ -57,15 +58,14 @@ def remove_last_measurement():
             s.commit()
         return last_record
 
-
-# def add_batch_measurements(weight_obj_list):
-#     """Adds a batch of weight measurements to the database.
-
-#     If an error occurs then `False` will be returned.
-#     """
-#     Session = get_session()
-#     with Session.begin() as s:
+        
+def retrieve_data_points(length=1):
+    start, end = get_date_range(length)
+    Session = get_session()
+    with Session.begin() as s:
+        qry = s.query(Weight).filter(Weight.date > start)
+    return qry
 
 
 if __name__ == "__main__":
-    remove_last_measurement()
+    retrieve_data_points()

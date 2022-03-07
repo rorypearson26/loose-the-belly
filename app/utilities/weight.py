@@ -40,6 +40,13 @@ class Weight(Base):
             f"date: {format_dates(date=self.date, return_date_format='%d-%m-%y')}"
         )
         return info
+    
+    def to_dict(self):
+        return {
+            'weight': self.weight,
+            'clothing_code': self.clothing_code,
+            'date': self.date
+        }
 
     def parse_weight(self, msg_str):
         weight = TextParser(input_text=msg_str, cast_to_type=float, regex_name="weight")
