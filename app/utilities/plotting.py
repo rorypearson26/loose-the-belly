@@ -1,7 +1,8 @@
-from lib2to3.pgen2.pgen import DFAState
 from pathlib import Path
 
 import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
+import numpy as np
 import pandas as pd
 
 from app.utilities.database_utils import retrieve_data_points
@@ -14,34 +15,33 @@ def plot_time_series(length):
     data = retrieve_data_points(length)
     df = process_data(data)
     create_plot(df)
-    # msg_block = create_image_block()
     return output_path
 
 
 def create_plot(df):
     fig, ax = plt.subplots()
-    ax.scatter(df.date, df.weight)
-    fig.show()
-    fig.savefig(output_path)
-
-
-def create_image_block():
-    block = {
-        "type": "image",
-        "title": {"type": "plain_text", "text": "Please enjoy this photo of a kitten"},
-        "block_id": "image4",
-        "image_url": f"{output_path}",
-        "alt_text": "An incredibly cute kitten.",
-    }
-    return block
+    colours = ['r', 'b', 'g']
+    i = 0
+    for key, grp in df.groupby(['clothing_code']):
+        x = mdates.date2num(grp['date'])
+        z = np.polyfit(x, grp['weight'], 1)
+        p = np.poly1d(z)
+        ax.plot(x,p(x),f"{colours[i]}--")
+        ax.scatter(grp['date'], grp['weight'], c=colours[i], label=key)
+        i += 1
+        # Setup nice date format.
+        locator = mdates.MonthLocator()  # every month
+        fmt = mdates.DateFormatter('%b')
+        X = plt.gca().xaxis
+        X.set_major_locator(locator)
+        # Specify formatter
+        X.set_major_formatter(fmt)
+        plt.grid(visible=True, which='both')
+        ax.legend()
+        fig.savefig(output_path)
 
 
 def process_data(data):
     df = pd.DataFrame.from_records([w.to_dict() for w in data])
     df.sort_values(by="date", inplace=True)
     return df
-
-
-if __name__ == "__main__":
-    plot_time_series(6)
-    print(output_path)
