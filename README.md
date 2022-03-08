@@ -7,6 +7,6 @@ List of commands:
 - add
 - readcsv
 - deletelast
-- plt
+- plot
 
 All commands are case-insensitive but should should be followed by a single space to ensure proper parsing of arguments.
