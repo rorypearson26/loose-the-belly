@@ -40,7 +40,7 @@ def get_date_range(length):
 
 def help_info():
     """Returns string with help to the user."""
-    help_str = """List of commands:\n- `add`\n- `readcsv`\n- `deletelast`\n- `plt`\n\
+    help_str = """List of commands:\n- `add`\n- `readcsv`\n- `deletelast`\n- `plot`\n\
 All commands are case-insensitive but should should be followed by a single \
 space to ensure proper parsing of arguments.
 """
