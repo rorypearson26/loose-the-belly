@@ -79,7 +79,6 @@ def mop_up_message(message, say):
 def main():
     handler = SocketModeHandler(app, APP_TOKEN)
     handler.start()
-    
 
 
 if __name__ == "__main__":
