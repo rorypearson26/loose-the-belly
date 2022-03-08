@@ -13,6 +13,7 @@ from app.utilities.database_utils import (add_measurement,
 from app.utilities.weight import Weight, parse_weight_csv
 from app.utilities.plotting import plot_time_series
 from app.utilities.text_parsing import TextParser
+from app.utilities.helper_functions import help_info
 
 BOT_TOKEN = config("SLACK_BOT_TOKEN")
 APP_TOKEN = config("SLACK_APP_TOKEN")
@@ -67,6 +68,12 @@ def read_csv_message(message, say):
         say(f"Successfully added {len(weight_list)} measurement(s).")
     except ValueError:
         say("Error whilst adding batch of measurements.")
+
+
+@app.message(re.compile(r"help", flags=re.IGNORECASE))
+def help_message(message, say):
+    """Listens for `help` and returns list of useable commands."""
+    say(help_info())
 
 
 @app.message(re.compile(r".*", flags=re.IGNORECASE))

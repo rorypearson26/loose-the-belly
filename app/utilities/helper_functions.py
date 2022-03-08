@@ -1,4 +1,5 @@
 from datetime import date, datetime, timedelta
+from pickletools import read_unicodestring1
 
 
 def format_dates(date, date_format=None, return_date_format=None):
@@ -35,3 +36,12 @@ def get_date_range(length):
     rough_days = int(length) * 30
     start = end - timedelta(days=rough_days)
     return (start, end)
+
+
+def help_info():
+    """Returns string with help to the user."""
+    help_str = """List of commands:\n- `add`\n- `readcsv`\n- `deletelast`\n- `plt`\n\
+All commands are case-insensitive but should should be followed by a single \
+space to ensure proper parsing of arguments.
+"""
+    return help_str
