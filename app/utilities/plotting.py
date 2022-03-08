@@ -31,12 +31,13 @@ def create_plot(df):
         i += 1
         # Setup nice date format.
         locator = mdates.MonthLocator()  # every month
-        fmt = mdates.DateFormatter('%b')
+        fmt = mdates.DateFormatter('%b-%y')
         X = plt.gca().xaxis
         X.set_major_locator(locator)
         # Specify formatter
         X.set_major_formatter(fmt)
         plt.grid(visible=True, which='both')
+        plt.ylabel('Weight (kg)')
         ax.legend()
         fig.savefig(output_path)
 
